@@ -1,4 +1,4 @@
-package com.epam.portal.repositry;
+package com.epam.portal.repository;
 
 import com.epam.portal.entity.News;
 import org.hibernate.Session;
@@ -19,7 +19,17 @@ public class NewsDAOImpl implements NewsDAO {
 
     @Override
     public News getNewsById(long id) {
-        return null;
+        Session currentSession = sessionFactory.getCurrentSession();
+
+        currentSession.beginTransaction();
+
+        News news = currentSession.get(News.class, id);
+
+        currentSession.getTransaction().commit();
+
+        currentSession.close();
+
+        return news;
     }
 
     @Override

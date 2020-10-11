@@ -1,4 +1,4 @@
-package com.epam.portal.repositry;
+package com.epam.portal.repository;
 
 import com.epam.portal.entity.News;
 

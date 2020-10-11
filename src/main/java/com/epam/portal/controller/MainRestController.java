@@ -18,7 +18,6 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @RestController
 public class MainRestController {
 
-    @Autowired
     private NewsService newsService;
 
     @GetMapping("/get-all-news")
@@ -34,4 +33,8 @@ public class MainRestController {
         return ResponseEntity.ok(news.getTitle() + " " + news.getBrief());
     }
 
+    @Autowired
+    public void setNewsService(NewsService newsService) {
+        this.newsService = newsService;
+    }
 }
