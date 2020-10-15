@@ -64,11 +64,14 @@ public class NewsDAOImpl implements NewsDAO {
     }
 
     @Override
-    public void deleteNews(News news) {
+    public void deleteNews(long id) {
 
         Session currentSession = sessionFactory.getCurrentSession();
 
         currentSession.beginTransaction();
+
+        News news = new News();
+        news.setId(id);
 
         currentSession.delete(news);
         currentSession.getTransaction().commit();

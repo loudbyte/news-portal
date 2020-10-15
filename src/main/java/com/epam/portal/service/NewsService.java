@@ -1,16 +1,16 @@
 package com.epam.portal.service;
 
-import com.epam.portal.entity.News;
+import com.epam.portal.dto.NewsDTO;
 
 import java.util.List;
 
 public interface NewsService {
 
-    long saveOrUpdateNews(News news);
+    long saveOrUpdateNews(NewsDTO news);
 
-    News getNewsById(long id);
+    NewsDTO getNewsById(long id);
 
-    List<News> getAllNews();
+    List<NewsDTO> getAllNews();
 
-    void deleteNews(News news);
+    void deleteNews(long id);
 }

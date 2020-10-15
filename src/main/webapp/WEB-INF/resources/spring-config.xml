@@ -10,46 +10,10 @@
 		http://www.springframework.org/schema/mvc
 		http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
-
-<!--	&lt;!&ndash; Step 1: Define Database DataSource / connection pool &ndash;&gt;-->
-<!--	<bean id="myDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"-->
-<!--		  destroy-method="close">-->
-<!--		<property name="driverClass" value="oracle.jdbc.OracleDriver" />-->
-<!--		<property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.99.100:1521/ORCLCDB.localdomain" />-->
-<!--		<property name="user" value="loudbyte" />-->
-<!--		<property name="password" value="loudbyte" />-->
-
-<!--		&lt;!&ndash; these are connection pool properties for C3P0 &ndash;&gt;-->
-<!--		<property name="minPoolSize" value="1" />-->
-<!--		<property name="maxPoolSize" value="10" />-->
-<!--		<property name="maxIdleTime" value="30000" />-->
-<!--	</bean>-->
-
-<!--	&lt;!&ndash; Step 2: Setup Hibernate session factory &ndash;&gt;-->
-<!--	<bean id="sessionFactory"-->
-<!--		  class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">-->
-<!--		<property name="dataSource" ref="myDataSource" />-->
-<!--		<property name="packagesToScan" value="com.epam.portal.*" />-->
-<!--		<property name="configLocation" value="hibernate.cfg.xml"/>-->
-<!--	</bean>-->
-
-<!--	&lt;!&ndash; Step 3: Setup Hibernate transaction manager &ndash;&gt;-->
-<!--	<bean id="transactionManager"-->
-<!--		  class="org.springframework.orm.hibernate5.HibernateTransactionManager">-->
-<!--		<property name="sessionFactory" ref="sessionFactory"/>-->
-<!--	</bean>-->
-
 	<!-- Add support for component scanning -->
 	<context:component-scan base-package="com.epam.portal" />
 
 	<!-- Add support for conversion, formatting and validation support -->
 	<mvc:annotation-driven/>
-
-	<!-- Define Spring MVC view resolver -->
-	<bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/view/" />
-		<property name="suffix" value=".jsp" />
-	</bean>
 
 </beans>
