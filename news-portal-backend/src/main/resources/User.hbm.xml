@@ -1,0 +1,22 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "com.epam.portal.entity.User" table = "USER_NEWS">
+
+        <meta attribute = "class-description">
+            This class contains the user detail.
+        </meta>
+
+        <id name = "id" type = "java.lang.Long" column = "ID">
+            <generator class="native"/>
+        </id>
+
+        <property name = "login" column = "LOGIN" type = "java.lang.String"/>
+        <property name = "password" column = "PASSWORD" type = "java.lang.String"/>
+        <property name = "roleId" column = "ROLE_ID" type = "java.lang.Long"/>
+
+    </class>
+</hibernate-mapping>
