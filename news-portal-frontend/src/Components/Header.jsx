@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Navbar, Nav, ButtonGroup, Container, Form, FormControl, Button } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import AddNews from '../Pages/AddNews';
 import NewsList from '../Pages/NewsList';
 import Welcome from '../Pages/Welcome';
 import ViewNews from '../Pages/ViewNews';
@@ -29,7 +28,7 @@ export default class Header extends Component {
 
             <Router>
                 <Switch>
-                    <Route exact path="/addNews" component={AddNews} />
+                    <Route exact path="/addNews" component={EditNews} />
                     <Route exact path="/newsList" component={NewsList} />
                     <Route exact path="/view" component={ViewNews} />
                     <Route exact path="/edit" component={EditNews} />
