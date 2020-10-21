@@ -3,7 +3,6 @@ package com.epam.portal.controller;
 import com.epam.portal.dto.NewsDTO;
 import com.epam.portal.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
