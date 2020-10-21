@@ -24,28 +24,33 @@ public class MainRestController {
 
     private NewsService newsService;
 
-    @GetMapping("/get-all-news")
+    @Autowired
+    public void setNewsService(NewsService newsService) {
+        this.newsService = newsService;
+    }
+
+    @GetMapping("/news")
     public ResponseEntity<List<NewsDTO>> getAllNews() {
 
         return ResponseEntity.ok(newsService.getAllNews());
     }
 
-    @GetMapping("/get-news-by-id")
-    public ResponseEntity<NewsDTO> getNewsById(@RequestBody NewsDTO newsDTO){
+    @GetMapping("/news/{id}")
+    public ResponseEntity<NewsDTO> getNewsById(@PathVariable("id") Long id){
 
         // TODO catch exception if try to get non existing entity
 
-        return ResponseEntity.ok(newsService.getNewsById(newsDTO.getId()));
+        return ResponseEntity.ok(newsService.getNewsById(id));
     }
 
-    @PostMapping(path = "/save-or-update-news", consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/news", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> saveOrUpdateNews(@RequestBody NewsDTO newsDTO) {
 
         newsService.saveOrUpdateNews(newsDTO);
         return ResponseEntity.ok(newsDTO.getTitle() + " " + newsDTO.getBrief());
     }
 
-    @DeleteMapping("/delete-news/{id}")
+    @DeleteMapping("/news/{id}")
     public ResponseEntity<String> deleteNewsById(@PathVariable("id") Long id) {
 
         // TODO catch exception if try to delete non existing entity
@@ -53,10 +58,4 @@ public class MainRestController {
         newsService.deleteNews(id);
         return ResponseEntity.ok("News with id " + id + " deleted.");
     }
-
-    @Autowired
-    public void setNewsService(NewsService newsService) {
-        this.newsService = newsService;
-    }
-
 }

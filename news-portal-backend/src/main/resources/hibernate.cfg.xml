@@ -9,10 +9,13 @@
         <property name="connection.url">jdbc:oracle:thin:@192.168.99.100:1521/ORCLCDB.localdomain</property>
         <property name="connection.username">loudbyte</property>
         <property name="connection.password">loudbyte</property>
-        <property name="dialect">org.hibernate.dialect.Oracle8iDialect</property>
+        <property name="dialect">org.hibernate.dialect.Oracle12cDialect</property>
         <property name="hibernate.connection.pool_size">10</property>
         <property name="show_sql">true</property>
         <property name="current_session_context_class">thread</property>
+
+        <mapping resource="Role.hbm.xml"/>
+        <mapping resource="User.hbm.xml"/>
     </session-factory>
 
 </hibernate-configuration>

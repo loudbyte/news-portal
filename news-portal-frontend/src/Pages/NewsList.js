@@ -13,7 +13,7 @@ class NewsList extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/news-portal/api/get-all-news')
+        fetch('http://localhost:8080/news-portal/api/news')
         // fetch('https://jsonplaceholder.typicode.com/users')
             .then(res => res.json())
             .then(json => {
