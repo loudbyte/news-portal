@@ -1,21 +1,44 @@
-import React from 'react';
-import './App.css';
-import { Container, Row, Col } from 'react-bootstrap';
-import Header from './Components/Header';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Actions from './Components/Actions';
-import Welcome from './Pages/Welcome';
-// import NewsList from './Pages/NewsList';
+import React, { Component } from "react";
+import { Switch, Route, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
+import AddNews from "./components/add-news.component";
+import News from "./components/news.component";
+import NewsList from "./components/news-list.component";
 
-function App() {
-  return (
-    <div className="App">
-    <Container>
-      <Header/>
-    </Container>
-    </div>
-  )
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <nav className="navbar navbar-expand navbar-dark bg-dark">
+          <a href="/news" className="navbar-brand">
+            News Portal
+          </a>
+          <div className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link to={"/news"} className="nav-link">
+                All News
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/add"} className="nav-link">
+                Add
+              </Link>
+            </li>
+          </div>
+        </nav>
+
+        <div className="container mt-3">
+          <Switch>
+            <Route exact path={["/", "/news"]} component={NewsList} />
+            <Route exact path="/add" component={AddNews} />
+            <Route path="/news/:id" component={News} />
+          </Switch>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
