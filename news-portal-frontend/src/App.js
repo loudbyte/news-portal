@@ -4,7 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 import AddNews from "./components/add-news.component";
-import News from "./components/news.component";
+import EditNews from "./components/edit-news.component";
+import ViewNews from "./components/view-news.component";
 import NewsList from "./components/news-list.component";
 
 class App extends Component {
@@ -33,7 +34,8 @@ class App extends Component {
           <Switch>
             <Route exact path={["/", "/news"]} component={NewsList} />
             <Route exact path="/add" component={AddNews} />
-            <Route path="/news/:id" component={News} />
+            <Route path="/edit/:id" component={EditNews} />
+            <Route path="/view/:id" component={ViewNews} />
           </Switch>
         </div>
       </div>

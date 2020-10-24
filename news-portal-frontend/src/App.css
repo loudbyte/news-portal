@@ -13,3 +13,24 @@
   max-width: 300px;
   margin: auto;
 }
+
+.link:link {
+  color: #3366BB;
+  text-decoration: none;
+  margin: 5%;
+}
+
+.link:hover {
+  color: blue;
+}
+.link:active {
+  color: teal;
+}
+
+.checkbox.checkbox {
+  margin: 5%;
+}
+
+.my-button.my-button {
+  margin: 1%;
+}

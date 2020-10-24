@@ -1,7 +1,5 @@
 package com.epam.portal.dto;
 
-import java.time.LocalDateTime;
-
 public class NewsDTO {
 
     private long id;
@@ -12,12 +10,12 @@ public class NewsDTO {
 
     private String content;
 
-    private LocalDateTime newsDate;
+    private String newsDate;
 
     public NewsDTO() {
     }
 
-    public NewsDTO(long id, String title, String brief, String content, LocalDateTime newsDate) {
+    public NewsDTO(long id, String title, String brief, String content, String newsDate) {
         this.id = id;
         this.title = title;
         this.brief = brief;
@@ -57,11 +55,11 @@ public class NewsDTO {
         this.content = content;
     }
 
-    public LocalDateTime getNewsDate() {
+    public String getNewsDate() {
         return newsDate;
     }
 
-    public void setNewsDate(LocalDateTime newsDate) {
+    public void setNewsDate(String newsDate) {
         this.newsDate = newsDate;
     }
 }
