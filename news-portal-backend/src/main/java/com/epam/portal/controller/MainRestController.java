@@ -26,16 +26,15 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @RestController
 public class MainRestController {
 
-
     @ExceptionHandler({BusinessException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleException(BusinessException businessException) {
+    public String handleBusinessException(BusinessException businessException) {
         return businessException.getMessage();
     }
 
     @ExceptionHandler({NullPointerException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleException2(NullPointerException businessException) {
+    public String handleNullPointerException(NullPointerException businessException) {
         return businessException.getMessage();
     }
     private NewsService newsService;
@@ -76,7 +75,6 @@ public class MainRestController {
         } catch (PersistenceException exception) {
             throw new BusinessException("News with that id not found");
         }
-
         return ResponseEntity.ok("News with id " + id + " deleted.");
     }
 
