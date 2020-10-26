@@ -1,10 +1,8 @@
 package com.epam.portal.controller;
 
-import com.epam.portal.dto.DeleteNewsRequest;
 import com.epam.portal.dto.NewsDTO;
 import com.epam.portal.exception.BusinessException;
 import com.epam.portal.service.NewsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.PersistenceException;
 import java.util.List;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
@@ -53,11 +52,13 @@ public class MainRestController {
     }
 
     @GetMapping("/news/{id}")
-    public ResponseEntity<NewsDTO> getNewsById(@PathVariable("id") Long id) {
+    public ResponseEntity<NewsDTO> getNewsById(@PathVariable("id") Long id) throws BusinessException {
 
-        // TODO catch exception if try to get non existing entity
-
-        return ResponseEntity.ok(newsService.getNewsById(id));
+        try {
+            return ResponseEntity.ok(newsService.getNewsById(id));
+        } catch (NullPointerException exception) {
+            throw new BusinessException("News with that id not found");
+        }
     }
 
     @PostMapping(path = "/news", consumes = APPLICATION_JSON_VALUE)
@@ -68,11 +69,14 @@ public class MainRestController {
     }
 
     @DeleteMapping("/news/{id}")
-    public ResponseEntity<String> deleteNewsById(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteNewsById(@PathVariable("id") Long id) throws BusinessException {
 
-        // TODO catch exception if try to delete non existing entity
+        try {
+            newsService.deleteNews(id);
+        } catch (PersistenceException exception) {
+            throw new BusinessException("News with that id not found");
+        }
 
-        newsService.deleteNews(id);
         return ResponseEntity.ok("News with id " + id + " deleted.");
     }
 
