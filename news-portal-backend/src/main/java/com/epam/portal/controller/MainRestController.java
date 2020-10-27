@@ -34,13 +34,13 @@ public class MainRestController {
 
     @ExceptionHandler({NullPointerException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleNullPointerException(NullPointerException businessException) {
-        return businessException.getMessage();
+    public String handleNullPointerException(NullPointerException nullPointerException) {
+        return nullPointerException.getMessage();
     }
-    private NewsService newsService;
 
-    @Autowired
-    public void setNewsService(NewsService newsService) {
+    private final NewsService newsService;
+
+    public MainRestController(NewsService newsService) {
         this.newsService = newsService;
     }
 
@@ -63,8 +63,12 @@ public class MainRestController {
     @PostMapping(path = "/news", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> saveOrUpdateNews(@RequestBody NewsDTO newsDTO) throws BusinessException {
 
-        newsService.saveOrUpdateNews(newsDTO);
-        return ResponseEntity.ok(newsDTO.getTitle() + " " + newsDTO.getBrief());
+        try {
+            newsService.saveOrUpdateNews(newsDTO);
+            return ResponseEntity.ok(newsDTO.getTitle() + " " + newsDTO.getBrief());
+        } catch (PersistenceException exception) {
+            throw new BusinessException("Failed to create news");
+        }
     }
 
     @DeleteMapping("/news/{id}")
