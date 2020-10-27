@@ -1,6 +1,7 @@
 package com.epam.portal.controller;
 
 import com.epam.portal.dto.NewsDTO;
+import com.epam.portal.entity.News;
 import com.epam.portal.exception.BusinessException;
 import com.epam.portal.repository.NewsDAO;
 import com.epam.portal.service.NewsService;
@@ -43,14 +44,19 @@ public class MainRestControllerTest {
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
 
+    public NewsDTO newsDTO;
+    public News news;
+
     @Before
     public void before() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(new MainRestController(newsService)).build();
+        newsDTO = new NewsDTO(NEWS_ID_1, TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_STRING_DATE);
+        news = new News(TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_DATE);
+        news.setId(1L);
     }
 
     @Test
     public void testGetAllNews_WhenEverythingIsOk() throws Exception {
-        NewsDTO newsDTO = new NewsDTO(NEWS_ID_1, TEST_TEXT, TEST_TEXT, TEST_TEXT, TEST_STRING_DATE);
         when(newsService.getAllNews()).thenReturn(Collections.singletonList(newsDTO));
         mockMvc.perform(get("/api/news"))
                 .andExpect(status().isOk());
@@ -59,7 +65,6 @@ public class MainRestControllerTest {
     @Test
     public void testGetNewsByI_WhenEverythingIsOkd() throws Exception {
         long testId = 1L;
-        NewsDTO newsDTO = new NewsDTO(NEWS_ID_1, TEST_TEXT, TEST_TEXT, TEST_TEXT, TEST_STRING_DATE);
         when(newsService.getNewsById(testId)).thenReturn(newsDTO);
         mockMvc.perform(get("/api/news/1"))
                 .andExpect(status().isOk());
@@ -74,7 +79,6 @@ public class MainRestControllerTest {
 
     @Test
     public void saveOrUpdateNews_WhenEverythingIsOk() throws Exception {
-        NewsDTO newsDTO = new NewsDTO(NEWS_ID_1, TEST_TEXT, TEST_TEXT, TEST_TEXT, TEST_STRING_DATE);
         when(newsService.saveOrUpdateNews(newsDTO)).thenReturn(NEWS_ID_1);
         mockMvc.perform(post("/api/news")
                 .content("{}")
@@ -85,7 +89,6 @@ public class MainRestControllerTest {
     @Test
     public void saveOrUpdateNews_WhenReturnError415() throws Exception {
         long testId = 1L;
-        NewsDTO newsDTO = new NewsDTO(NEWS_ID_1, TEST_TEXT, TEST_TEXT, TEST_TEXT, TEST_STRING_DATE);
         when(newsService.saveOrUpdateNews(newsDTO)).thenReturn(testId);
         mockMvc.perform(post("/api/news")
                 .content("")
@@ -97,9 +100,9 @@ public class MainRestControllerTest {
     public void saveOrUpdateNews_WhenThrowsBusinessException() throws Exception {
         exceptionRule.expect(BusinessException.class);
         exceptionRule.expectMessage("Failed to create news");
-        NEWS_DTO_1.setNewsDate("wrong date format");
-        when(newsService.saveOrUpdateNews(NEWS_DTO_1)).thenThrow(new BusinessException("Failed to create news"));
-        controller.saveOrUpdateNews(NEWS_DTO_1);
+        newsDTO.setNewsDate("wrong date format");
+        when(newsService.saveOrUpdateNews(newsDTO)).thenThrow(new BusinessException("Failed to create news"));
+        controller.saveOrUpdateNews(newsDTO);
     }
 
     @Test
