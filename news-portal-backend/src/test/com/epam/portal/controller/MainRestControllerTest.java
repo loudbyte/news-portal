@@ -35,9 +35,6 @@ public class MainRestControllerTest {
     @Mock
     private NewsService newsService;
 
-    @Mock
-    private NewsDAO newsDAO;
-
     @InjectMocks
     private MainRestController controller;
 
@@ -45,14 +42,11 @@ public class MainRestControllerTest {
     public ExpectedException exceptionRule = ExpectedException.none();
 
     public NewsDTO newsDTO;
-    public News news;
 
     @Before
     public void before() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(new MainRestController(newsService)).build();
         newsDTO = new NewsDTO(NEWS_ID_1, TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_STRING_DATE);
-        news = new News(TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_DATE);
-        news.setId(1L);
     }
 
     @Test
@@ -78,7 +72,7 @@ public class MainRestControllerTest {
     }
 
     @Test
-    public void saveOrUpdateNews_WhenEverythingIsOk() throws Exception {
+    public void testSaveOrUpdateNews_WhenEverythingIsOk() throws Exception {
         when(newsService.saveOrUpdateNews(newsDTO)).thenReturn(NEWS_ID_1);
         mockMvc.perform(post("/api/news")
                 .content("{}")
@@ -87,7 +81,7 @@ public class MainRestControllerTest {
     }
 
     @Test
-    public void saveOrUpdateNews_WhenReturnError415() throws Exception {
+    public void testSaveOrUpdateNews_WhenReturnError415() throws Exception {
         long testId = 1L;
         when(newsService.saveOrUpdateNews(newsDTO)).thenReturn(testId);
         mockMvc.perform(post("/api/news")
@@ -97,7 +91,7 @@ public class MainRestControllerTest {
     }
 
     @Test
-    public void saveOrUpdateNews_WhenThrowsBusinessException() throws Exception {
+    public void testSaveOrUpdateNews_WhenThrowsBusinessException() throws Exception {
         exceptionRule.expect(BusinessException.class);
         exceptionRule.expectMessage("Failed to create news");
         newsDTO.setNewsDate("wrong date format");
@@ -106,7 +100,7 @@ public class MainRestControllerTest {
     }
 
     @Test
-    public void deleteNewsById_WhenEverythingIsOk() throws Exception {
+    public void testDeleteNewsById_WhenEverythingIsOk() throws Exception {
         long testId = 1L;
         doNothing().when(newsService).deleteNews(testId);
         mockMvc.perform(delete("/api/news/1"))
@@ -114,7 +108,7 @@ public class MainRestControllerTest {
     }
 
     @Test
-    public void deleteNewsById_WhenThrowsBusinessException() throws Exception {
+    public void testDeleteNewsById_WhenThrowsBusinessException() throws Exception {
         long testId = 1L;
         exceptionRule.expect(BusinessException.class);
         exceptionRule.expectMessage("News with that id not found");
