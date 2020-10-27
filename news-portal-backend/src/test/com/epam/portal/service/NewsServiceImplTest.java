@@ -39,7 +39,7 @@ public class NewsServiceImplTest {
     @Before
     public void init() {
         newsDTO = new NewsDTO(NEWS_ID_1, TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_STRING_DATE);
-        news = new News(TEST_TEXT, TEST_TEXT,TEST_TEXT, testDate);
+        news = new News(TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_DATE_TIME);
         news.setId(1L);
     }
 

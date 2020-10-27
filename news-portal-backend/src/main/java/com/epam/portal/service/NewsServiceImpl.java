@@ -4,6 +4,7 @@ import com.epam.portal.dto.NewsDTO;
 import com.epam.portal.entity.News;
 import com.epam.portal.exception.BusinessException;
 import com.epam.portal.repository.NewsDAO;
+import com.epam.portal.validation.TextForbiddenWordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,12 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public long saveOrUpdateNews(NewsDTO news) throws BusinessException {
-        return newsDAO.saveOrUpdateNews(convertNewsDTOToEntity(news));
+        if (TextForbiddenWordValidator.isContainsForbiddenWords(news.getTitle())
+                || TextForbiddenWordValidator.isContainsForbiddenWords(news.getBrief())
+                || TextForbiddenWordValidator.isContainsForbiddenWords(news.getContent()))
+                throw new BusinessException("Text contains forbidden words");
+
+            return newsDAO.saveOrUpdateNews(convertNewsDTOToEntity(news));
     }
 
     @Override
