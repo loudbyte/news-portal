@@ -8,48 +8,74 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
 
 
 import javax.sql.DataSource;
 
-@Configuration
-@EnableWebSecurity
-public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
+//@Configuration
+//@EnableWebSecurity
+public class DemoSecurityConfig// extends WebSecurityConfigurerAdapter {
+{
 
-	// add a reference to our security data source
-	
-	@Autowired
-	private DataSource securityDataSource;
-	
-	
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//
+//		// add our users for in memory authentication
+//
+//		User.UserBuilder users = User.withDefaultPasswordEncoder();
+//
+//		auth.inMemoryAuthentication()
+//				.withUser(users.username("john").password("test123").roles("EMPLOYEE"))
+//				.withUser(users.username("mary").password("test123").roles("MANAGER"))
+//				.withUser(users.username("susan").password("test123").roles("ADMIN"));
+//	}
+//
+//
+//
+//
+//
 
-		// use jdbc authentication ... oh yeah!!!
-		
-		auth.jdbcAuthentication().dataSource(securityDataSource);
-		
-	}
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/news").hasRole("EMPLOYEE")
-                .antMatchers(HttpMethod.GET, "/api/news/**").hasRole("EMPLOYEE")
-                .antMatchers(HttpMethod.POST, "/api/news").hasAnyRole("MANAGER", "ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/news/**").hasAnyRole("MANAGER", "ADMIN")
-                .antMatchers(HttpMethod.PUT, "/api/news").hasAnyRole("MANAGER", "ADMIN")
-                .antMatchers(HttpMethod.PUT, "/api/news/**").hasAnyRole("MANAGER", "ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/news/**").hasRole("ADMIN")
-                .and()
-                .httpBasic()
-                .and()
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		
-	}
-		
+//
+//
+//
+//
+//	// add a reference to our security data source
+//
+//	@Autowired
+//	private DataSource securityDataSource;
+//
+//
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//
+//		// use jdbc authentication ... oh yeah!!!
+//
+//		auth.jdbcAuthentication().dataSource(securityDataSource);
+//
+//	}
+//
+//	@Override
+//	protected void configure(HttpSecurity http) throws Exception {
+//
+//        http.authorizeRequests()
+//                .antMatchers(HttpMethod.GET, "/api/news").hasRole("EMPLOYEE")
+//                .antMatchers(HttpMethod.GET, "/api/news/**").hasRole("EMPLOYEE")
+//                .antMatchers(HttpMethod.POST, "/api/news").hasAnyRole("MANAGER", "ADMIN")
+//                .antMatchers(HttpMethod.POST, "/api/news/**").hasAnyRole("MANAGER", "ADMIN")
+//                .antMatchers(HttpMethod.PUT, "/api/news").hasAnyRole("MANAGER", "ADMIN")
+//                .antMatchers(HttpMethod.PUT, "/api/news/**").hasAnyRole("MANAGER", "ADMIN")
+//                .antMatchers(HttpMethod.DELETE, "/api/news/**").hasRole("ADMIN")
+//                .and()
+//                .httpBasic()
+//                .and()
+//                .csrf().disable()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//
+//	}
+
 }
 
 
