@@ -20,5 +20,16 @@
 
         <property name = "name" column = "NAME" type = "java.lang.String"/>
 
+<!--        <set name="userList" inverse="true" lazy="false" cascade="none" fetch="select">-->
+<!--            <key column="ROLE_ID" not-null="true" />-->
+<!--            <key column="ID" not-null="true" />-->
+<!--            <key column="USER_ROLE_FK" not-null="true" />-->
+<!--            <one-to-many class="com.epam.portal.entity.User" />-->
+<!--        </set>-->
+        <set name="userList" inverse="true">
+            <key column="ROLE_ID"/>
+            <one-to-many class="com.epam.portal.entity.User"/>
+        </set>
+
     </class>
 </hibernate-mapping>

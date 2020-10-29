@@ -52,12 +52,4 @@ public class Role {
         tempUser.setRole(this);
     }
 
-    @Override
-    public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", userList=" + userList +
-                '}';
-    }
 }

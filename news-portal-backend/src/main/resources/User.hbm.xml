@@ -20,7 +20,14 @@
 
         <property name = "login" column = "LOGIN" type = "java.lang.String"/>
         <property name = "password" column = "PASSWORD" type = "java.lang.String"/>
-        <property name = "roleId" column = "ROLE_ID" type = "java.lang.Long"/>
+<!--        <property name = "roleId" column = "ROLE_ID" type = "java.lang.Long"/>-->
+<!--        <many-to-one name="role"-->
+<!--                     column="ROLE_ID"-->
+<!--                     class="com.epam.portal.entity.Role"-->
+<!--                    cascade="none">-->
+<!--        </many-to-one>-->
+<!--        <many-to-one name="role" class="com.epam.portal.entity.Role" column="ROLE_ID" not-null="true"/>-->
+        <many-to-one name="role" lazy="false" column="ROLE_ID" not-null="true"/>
 
     </class>
 </hibernate-mapping>

@@ -135,11 +135,24 @@
             <version>${spring.security.version}</version>
         </dependency>
 
-        <!-- Servlet -->
+        <!-- Servlet, JSP and JSTL support -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
         </dependency>
 
         <!-- Logger -->
@@ -162,6 +175,12 @@
             <artifactId>aspectjweaver</artifactId>
             <version>1.9.6</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5.2</version>
         </dependency>
 
     </dependencies>

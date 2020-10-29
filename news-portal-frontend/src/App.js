@@ -7,13 +7,17 @@ import AddNews from "./components/add-news.component";
 import EditNews from "./components/edit-news.component";
 import ViewNews from "./components/view-news.component";
 import NewsList from "./components/news-list.component";
+import Login from "./components/login.component";
+import Welcome from "./components/welcome.component";
+
+
 
 class App extends Component {
   render() {
     return (
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <a href="/news" className="navbar-brand">
+          <a href="/" className="navbar-brand">
             News Portal
           </a>
           <div className="navbar-nav mr-auto">
@@ -32,7 +36,9 @@ class App extends Component {
 
         <div className="container mt-3">
           <Switch>
-            <Route exact path={["/", "/news"]} component={NewsList} />
+            <Route exact path={["/"]} component={Welcome} />
+            <Route exact path={["/login"]} component={Login} />
+            <Route exact path={["/news"]} component={NewsList} />
             <Route exact path="/add" component={AddNews} />
             <Route path="/edit/:id" component={EditNews} />
             <Route path="/view/:id" component={ViewNews} />
