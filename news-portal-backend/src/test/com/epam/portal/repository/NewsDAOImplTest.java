@@ -18,7 +18,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
-import static com.epam.portal.NewsTestData.*;
+import static com.epam.portal.NewsTestData.FORMATTER;
+import static com.epam.portal.NewsTestData.TEST_STRING_DATE;
+import static com.epam.portal.NewsTestData.TEST_TEXT;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,7 +36,7 @@ public class NewsDAOImplTest extends TestCase {
     public LocalDateTime testDate;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         news = new News(TEST_TEXT, TEST_TEXT, TEST_TEXT, testDate);
         news.setId(1L);
         testDate = LocalDateTime.parse(TEST_STRING_DATE, FORMATTER);

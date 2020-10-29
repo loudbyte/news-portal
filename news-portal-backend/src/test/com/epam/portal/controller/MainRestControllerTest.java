@@ -1,9 +1,7 @@
 package com.epam.portal.controller;
 
 import com.epam.portal.dto.NewsDTO;
-import com.epam.portal.entity.News;
 import com.epam.portal.exception.BusinessException;
-import com.epam.portal.repository.NewsDAO;
 import com.epam.portal.service.NewsService;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,10 +18,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import javax.persistence.PersistenceException;
 import java.util.Collections;
 
-import static com.epam.portal.NewsTestData.*;
+import static com.epam.portal.NewsTestData.NEWS_ID_1;
+import static com.epam.portal.NewsTestData.TEST_STRING_DATE;
+import static com.epam.portal.NewsTestData.TEST_TEXT;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -57,7 +59,7 @@ public class MainRestControllerTest {
     }
 
     @Test
-    public void testGetNewsByI_WhenEverythingIsOkd() throws Exception {
+    public void testGetNewsById_WhenEverythingIsOkd() throws Exception {
         long testId = 1L;
         when(newsService.getNewsById(testId)).thenReturn(newsDTO);
         mockMvc.perform(get("/api/news/1"))

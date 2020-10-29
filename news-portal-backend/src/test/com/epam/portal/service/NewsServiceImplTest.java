@@ -18,7 +18,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.epam.portal.NewsTestData.*;
+import static com.epam.portal.NewsTestData.NEWS_ID_1;
+import static com.epam.portal.NewsTestData.TEST_DATE_TIME;
+import static com.epam.portal.NewsTestData.TEST_STRING_DATE;
+import static com.epam.portal.NewsTestData.TEST_TEXT;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
