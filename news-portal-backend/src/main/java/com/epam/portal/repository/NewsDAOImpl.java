@@ -33,7 +33,7 @@ public class NewsDAOImpl implements NewsDAO {
     }
 
     @Override
-    public long saveOrUpdateNews(News news) {
+    public News saveOrUpdateNews(News news) {
         Session currentSession = sessionFactory.getCurrentSession();
 
         currentSession.beginTransaction();
@@ -43,7 +43,7 @@ public class NewsDAOImpl implements NewsDAO {
         currentSession.getTransaction().commit();
         currentSession.close();
 
-        return news.getId();
+        return news;
     }
 
     @Override

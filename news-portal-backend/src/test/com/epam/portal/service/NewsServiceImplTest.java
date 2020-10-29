@@ -48,10 +48,9 @@ public class NewsServiceImplTest {
 
     @Test
     public void testSaveOrUpdateNews_WhenEverythingIsOk() throws BusinessException {
-        long testId = 1L;
-        when(newsDAO.saveOrUpdateNews(news)).thenReturn(testId);
-        long result = newsService.saveOrUpdateNews(newsDTO);
-        Assert.assertEquals(result, testId);
+        when(newsDAO.saveOrUpdateNews(news)).thenReturn(news);
+        NewsDTO resultNewsDTO = newsService.saveOrUpdateNews(newsDTO);
+        Assert.assertEquals(resultNewsDTO, newsDTO);
     }
 
     @Test

@@ -16,9 +16,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import static com.epam.portal.NewsTestData.NEWS_ID_1;
+import static com.epam.portal.NewsTestData.NEWS_ID_2;
 import static com.epam.portal.NewsTestData.TEST_STRING_DATE;
 import static com.epam.portal.NewsTestData.TEST_TEXT;
 import static org.mockito.Mockito.doNothing;
@@ -26,6 +29,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -44,18 +49,29 @@ public class MainRestControllerTest {
     public ExpectedException exceptionRule = ExpectedException.none();
 
     public NewsDTO newsDTO;
+    public NewsDTO anotherNewsDTO;
+    List<NewsDTO> newsDTOList;
 
     @Before
     public void before() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(new MainRestController(newsService)).build();
         newsDTO = new NewsDTO(NEWS_ID_1, TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_STRING_DATE);
+        anotherNewsDTO =  new NewsDTO(NEWS_ID_2, TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_STRING_DATE);
+        newsDTOList = new ArrayList<>();
+        newsDTOList.add(newsDTO);
+        newsDTOList.add(anotherNewsDTO);
     }
 
     @Test
     public void testGetAllNews_WhenEverythingIsOk() throws Exception {
         when(newsService.getAllNews()).thenReturn(Collections.singletonList(newsDTO));
         mockMvc.perform(get("/api/news"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.[0].id").value(newsDTO.getId()))
+                .andExpect(jsonPath("$.[0].title").value(newsDTO.getTitle()))
+                .andExpect(jsonPath("$.[0].brief").value(newsDTO.getBrief()))
+                .andExpect(jsonPath("$.[0].content").value(newsDTO.getContent()));
     }
 
     @Test
@@ -75,7 +91,7 @@ public class MainRestControllerTest {
 
     @Test
     public void testSaveOrUpdateNews_WhenEverythingIsOk() throws Exception {
-        when(newsService.saveOrUpdateNews(newsDTO)).thenReturn(NEWS_ID_1);
+        when(newsService.saveOrUpdateNews(newsDTO)).thenReturn(newsDTO);
         mockMvc.perform(post("/api/news")
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -84,8 +100,7 @@ public class MainRestControllerTest {
 
     @Test
     public void testSaveOrUpdateNews_WhenReturnError415() throws Exception {
-        long testId = 1L;
-        when(newsService.saveOrUpdateNews(newsDTO)).thenReturn(testId);
+        when(newsService.saveOrUpdateNews(newsDTO)).thenReturn(newsDTO);
         mockMvc.perform(post("/api/news")
                 .content("")
                 .contentType(MediaType.TEXT_PLAIN))

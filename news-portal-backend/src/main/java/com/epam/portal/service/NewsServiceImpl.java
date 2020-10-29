@@ -4,11 +4,12 @@ import com.epam.portal.dto.NewsDTO;
 import com.epam.portal.entity.News;
 import com.epam.portal.exception.BusinessException;
 import com.epam.portal.repository.NewsDAO;
+import com.epam.portal.validation.NewsDTOTextLengthValidator;
 import com.epam.portal.validation.TextForbiddenWordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +20,19 @@ public class NewsServiceImpl implements NewsService {
     private NewsDAO newsDAO;
 
     @Override
-    public long saveOrUpdateNews(NewsDTO news) throws BusinessException {
-        if (TextForbiddenWordValidator.isContainsForbiddenWords(news.getTitle())
-                || TextForbiddenWordValidator.isContainsForbiddenWords(news.getBrief())
-                || TextForbiddenWordValidator.isContainsForbiddenWords(news.getContent()))
-                throw new BusinessException("Text contains forbidden words");
+    public NewsDTO saveOrUpdateNews(NewsDTO newsDTO) throws BusinessException {
+        isValid(newsDTO);
+        return convertNewsEntityToDTO(newsDAO.saveOrUpdateNews(convertNewsDTOToEntity(newsDTO)));
+    }
 
-            return newsDAO.saveOrUpdateNews(convertNewsDTOToEntity(news));
+    private void isValid(NewsDTO newsDTO) throws BusinessException {
+        TextForbiddenWordValidator.isNotContainsForbiddenWords(newsDTO.getTitle());
+        TextForbiddenWordValidator.isNotContainsForbiddenWords(newsDTO.getBrief());
+        TextForbiddenWordValidator.isNotContainsForbiddenWords(newsDTO.getContent());
+        NewsDTOTextLengthValidator.isTitleLengthValid(newsDTO);
+        NewsDTOTextLengthValidator.isBriefLengthValid(newsDTO);
+        NewsDTOTextLengthValidator.isContentLengthValid(newsDTO);
+        NewsDTOTextLengthValidator.isDateLengthValid(newsDTO);
     }
 
     @Override
@@ -76,14 +83,15 @@ public class NewsServiceImpl implements NewsService {
         news.setTitle(newsDTO.getTitle());
         news.setBrief(newsDTO.getBrief());
         news.setContent(newsDTO.getContent());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        LocalDateTime localDateTime;
+        System.out.println(newsDTO.getNewsDate());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate;
         try {
-            localDateTime = LocalDateTime.parse(newsDTO.getNewsDate(), formatter);
+            localDate = LocalDate.parse(newsDTO.getNewsDate(), formatter);
         } catch (Exception exception) {
-            throw new BusinessException("Not valid format of date.");
+            throw new BusinessException("Not valid format of date");
         }
-        news.setNewsDate(localDateTime);
+        news.setNewsDate(localDate);
         return news;
     }
 }

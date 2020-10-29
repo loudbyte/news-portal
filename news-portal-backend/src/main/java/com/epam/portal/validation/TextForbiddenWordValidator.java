@@ -1,5 +1,6 @@
 package com.epam.portal.validation;
 
+import com.epam.portal.exception.BusinessException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -13,20 +14,17 @@ import java.util.List;
 @Component
 public class TextForbiddenWordValidator {
 
-    public static boolean isContainsForbiddenWords(String inputText) {
-        boolean found = false;
+    public static boolean isNotContainsForbiddenWords(String inputText) throws BusinessException {
         String[] inputTextAsWordArray = inputText.split(" ");
         List<String> items = getWords();
         for (int counterOfForbiddenWords = 0; counterOfForbiddenWords < items.size(); counterOfForbiddenWords++) {
             for (int counterOfInputWords = 0; counterOfInputWords < inputTextAsWordArray.length; counterOfInputWords++) {
                 if (inputTextAsWordArray[counterOfInputWords].toLowerCase().equals(items.get(counterOfForbiddenWords))) {
-                    found = true;
-                    break;
+                    throw new BusinessException("Text contains forbidden words");
                 }
             }
-            if (found) break;
         }
-        return found;
+        return true;
     }
 
     public static List<String> getWords() {

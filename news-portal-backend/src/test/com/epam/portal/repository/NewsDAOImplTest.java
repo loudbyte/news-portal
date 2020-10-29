@@ -13,7 +13,7 @@ import org.junit.rules.ExpectedException;
 
 
 import javax.persistence.PersistenceException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -33,29 +33,28 @@ public class NewsDAOImplTest extends TestCase {
     public ExpectedException exceptionRule = ExpectedException.none();
 
     public News news;
-    public LocalDateTime testDate;
+    public LocalDate testDate;
 
     @Before
     public void setUp() {
         news = new News(TEST_TEXT, TEST_TEXT, TEST_TEXT, testDate);
         news.setId(1L);
-        testDate = LocalDateTime.parse(TEST_STRING_DATE, FORMATTER);
+        testDate = LocalDate.parse(TEST_STRING_DATE, FORMATTER);
 
     }
 
     @Test
     public void testSaveOrUpdateNews_WhenEverythingIsOk() {
-        long testId = 1L;
-        when(newsDAO.saveOrUpdateNews(news)).thenReturn(testId);
-        long result = newsDAO.saveOrUpdateNews(news);
-        Assert.assertEquals(result, testId);
+        when(newsDAO.saveOrUpdateNews(news)).thenReturn(news);
+        News resultNews = newsDAO.saveOrUpdateNews(news);
+        Assert.assertEquals(resultNews, news);
     }
 
     @Test
     public void testSaveOrUpdateNews_WhenThrowsBusinessException() {
         exceptionRule.expect(PersistenceException.class);
         DateTimeFormatter wrongFormatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
-        LocalDateTime wrongFormatDate = LocalDateTime.now();
+        LocalDate wrongFormatDate = LocalDate.now();
         wrongFormatDate.format(wrongFormatter);
         news.setNewsDate(wrongFormatDate);
         when(newsDAO.saveOrUpdateNews(news)).thenThrow(new PersistenceException());

@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -24,12 +24,12 @@ public class News {
     private String content;
 
     @Column(name = "NEWS_DATE")
-    private LocalDateTime newsDate;
+    private LocalDate newsDate;
 
     public News() {
     }
 
-    public News(String title, String brief, String content, LocalDateTime newsDate) {
+    public News(String title, String brief, String content, LocalDate newsDate) {
         this.title = title;
         this.brief = brief;
         this.content = content;
@@ -68,11 +68,11 @@ public class News {
         this.content = content;
     }
 
-    public LocalDateTime getNewsDate() {
+    public LocalDate getNewsDate() {
         return newsDate;
     }
 
-    public void setNewsDate(LocalDateTime newsDate) {
+    public void setNewsDate(LocalDate newsDate) {
         this.newsDate = newsDate;
     }
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface NewsDAO {
 
-    long saveOrUpdateNews(News news);
+    News saveOrUpdateNews(News news);
 
     News getNewsById(long id);
 

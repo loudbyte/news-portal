@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface NewsService {
 
-    long saveOrUpdateNews(NewsDTO news) throws BusinessException;
+    NewsDTO saveOrUpdateNews(NewsDTO news) throws BusinessException;
 
     NewsDTO getNewsById(long id);
 

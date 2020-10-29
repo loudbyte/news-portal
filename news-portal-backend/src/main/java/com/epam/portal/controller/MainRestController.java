@@ -83,11 +83,11 @@ public class MainRestController {
     }
 
     @DeleteMapping(path = "/news", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> deleteNews(@RequestBody DeleteNewsRequest body) {
+    public ResponseEntity<String> deleteNews(@RequestBody List<String> body) {
 
         // TODO catch exception if try to delete non existing entity
 
-        newsService.deleteNews(body.getNewsIdList());
-        return ResponseEntity.ok("News with ids " + body.getNewsIdList().toString()  + " deleted.");
+//        newsService.deleteNews(body);
+        return ResponseEntity.ok("News with ids " + body.toString() + " deleted.");
     }
 }
