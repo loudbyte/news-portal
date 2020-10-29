@@ -16,7 +16,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
-import java.util.logging.Logger;
 
 @Configuration
 @PropertySource("classpath:persistence-oracle.properties")
@@ -26,17 +25,15 @@ import java.util.logging.Logger;
 public class SpringApplicationConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private Environment env;
-
-    private Logger logger = Logger.getLogger(getClass().getName());
+    private Environment environment;
 
     @Bean
     public DataSource securityDataSource() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(env.getProperty("jdbc.driver"));
-        dataSource.setUrl(env.getProperty("jdbc.url"));
-        dataSource.setUsername(env.getProperty("jdbc.user"));
-        dataSource.setPassword(env.getProperty("jdbc.password"));
+        dataSource.setDriverClassName(environment.getProperty("jdbc.driver"));
+        dataSource.setUrl(environment.getProperty("jdbc.url"));
+        dataSource.setUsername(environment.getProperty("jdbc.user"));
+        dataSource.setPassword(environment.getProperty("jdbc.password"));
         return dataSource;
     }
 
