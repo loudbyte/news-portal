@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -71,15 +72,20 @@ public class MainRestControllerTest {
                 .andExpect(jsonPath("$.[0].id").value(newsDTO.getId()))
                 .andExpect(jsonPath("$.[0].title").value(newsDTO.getTitle()))
                 .andExpect(jsonPath("$.[0].brief").value(newsDTO.getBrief()))
-                .andExpect(jsonPath("$.[0].content").value(newsDTO.getContent()));
+                .andExpect(jsonPath("$.[0].content").value(newsDTO.getContent()))
+                .andExpect(jsonPath("$.[0].newsDate").value(newsDTO.getNewsDate()));
     }
 
     @Test
     public void testGetNewsById_WhenEverythingIsOkd() throws Exception {
-        long testId = 1L;
-        when(newsService.getNewsById(testId)).thenReturn(newsDTO);
+        when(newsService.getNewsById(newsDTO.getId())).thenReturn(newsDTO);
         mockMvc.perform(get("/api/news/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(newsDTO.getId()))
+                .andExpect(jsonPath("$.title").value(newsDTO.getTitle()))
+                .andExpect(jsonPath("$.brief").value(newsDTO.getBrief()))
+                .andExpect(jsonPath("$.newsDate").value(newsDTO.getNewsDate()));
     }
 
     @Test
@@ -93,6 +99,7 @@ public class MainRestControllerTest {
     public void testSaveOrUpdateNews_WhenEverythingIsOk() throws Exception {
         when(newsService.saveOrUpdateNews(newsDTO)).thenReturn(newsDTO);
         mockMvc.perform(post("/api/news")
+                // TODO something with "{}"
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -132,5 +139,86 @@ public class MainRestControllerTest {
         when(controller.deleteNewsById(testId)).thenThrow(new PersistenceException());
         controller.deleteNewsById(testId);
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testAuthAdmin() throws Exception {
+        mockMvc.perform(get("/api/news"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/news/1"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/api/news")
+                // TODO something with "{}"
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(delete("/api/news/1"))
+                .andExpect(status().isOk());
+
+//        mockMvc.perform(delete("/api/news")
+//                // TODO something with "{}"
+//                .content("{}")
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk());
+
+    }
+
+//    @Test
+//    @WithMockUser(roles = "MANAGER")
+//    public void testAuthManager() throws Exception {
+//
+//        mockMvc.perform(get("/api/news"))
+//                .andExpect(status().isOk());
+//
+//        mockMvc.perform(get("/api/news/1"))
+//                .andExpect(status().isOk());
+//
+//        mockMvc.perform(post("/api/news")
+//                // TODO something with "{}"
+//                .content("{}")
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk());
+//
+//        mockMvc.perform(delete("/api/news/1"))
+//                .andExpect(status().is(403));
+//
+////        mockMvc.perform(delete("/api/news")
+////                // TODO something with "{}"
+////                .content("{}")
+////                .contentType(MediaType.APPLICATION_JSON))
+////                .andExpect(status().isOk());
+//
+//    }
+//
+//    @Test
+//    @WithMockUser(roles = "EMPLOYEE")
+//    public void testAuthEmployee() throws Exception {
+//        mockMvc.perform(get("/api/news")
+//                .with(SecurityMockMvcRequestPostProcessors.user("admin").password("pass").roles("ADMIN")))
+//                .andExpect(status().isOk());
+//
+//        mockMvc.perform(get("/api/news/1"))
+//                .andExpect(status().isOk());
+//
+////        mockMvc.perform(post("/api/news")
+////                // TODO something with "{}"
+////                .content("{}")
+////                .contentType(MediaType.APPLICATION_JSON))
+////                .andExpect(status().is(403));
+//
+//        mockMvc.perform(delete("/api/news/1")
+//                .with(SecurityMockMvcRequestPostProcessors.user("admin").password("pass").roles("EMPLOYEE")))
+//                .andExpect(status().is(403));
+//
+////        mockMvc.perform(delete("/api/news")
+////                // TODO something with "{}"
+////                .content("{}")
+////                .contentType(MediaType.APPLICATION_JSON))
+////                .andExpect(status().isOk());
+//
+//    }
 
 }

@@ -25,16 +25,6 @@ public class NewsServiceImpl implements NewsService {
         return convertNewsEntityToDTO(newsDAO.saveOrUpdateNews(convertNewsDTOToEntity(newsDTO)));
     }
 
-    private void isValid(NewsDTO newsDTO) throws BusinessException {
-        TextForbiddenWordValidator.isNotContainsForbiddenWords(newsDTO.getTitle());
-        TextForbiddenWordValidator.isNotContainsForbiddenWords(newsDTO.getBrief());
-        TextForbiddenWordValidator.isNotContainsForbiddenWords(newsDTO.getContent());
-        NewsDTOTextLengthValidator.isTitleLengthValid(newsDTO);
-        NewsDTOTextLengthValidator.isBriefLengthValid(newsDTO);
-        NewsDTOTextLengthValidator.isContentLengthValid(newsDTO);
-        NewsDTOTextLengthValidator.isDateLengthValid(newsDTO);
-    }
-
     @Override
     public NewsDTO getNewsById(long id) {
         return convertNewsEntityToDTO(newsDAO.getNewsById(id));
@@ -92,5 +82,15 @@ public class NewsServiceImpl implements NewsService {
         }
         news.setNewsDate(localDate);
         return news;
+    }
+
+    private void isValid(NewsDTO newsDTO) throws BusinessException {
+        TextForbiddenWordValidator.isNotContainsForbiddenWords(newsDTO.getTitle());
+        TextForbiddenWordValidator.isNotContainsForbiddenWords(newsDTO.getBrief());
+        TextForbiddenWordValidator.isNotContainsForbiddenWords(newsDTO.getContent());
+        NewsDTOTextLengthValidator.isTitleLengthValid(newsDTO);
+        NewsDTOTextLengthValidator.isBriefLengthValid(newsDTO);
+        NewsDTOTextLengthValidator.isContentLengthValid(newsDTO);
+        NewsDTOTextLengthValidator.isDateLengthValid(newsDTO);
     }
 }

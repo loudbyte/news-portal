@@ -122,7 +122,7 @@ export default class AddNews extends Component {
             <div>
               <label htmlFor="newsDate">Date</label>
               <input
-                type="datetime-local"
+                type="date"
                 className="form-control"
                 id="newsDate"
                 required

@@ -15,11 +15,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.epam.portal.NewsTestData.NEWS_ID_1;
-import static com.epam.portal.NewsTestData.TEST_DATE_TIME;
+import static com.epam.portal.NewsTestData.TEST_DATE;
 import static com.epam.portal.NewsTestData.TEST_STRING_DATE;
 import static com.epam.portal.NewsTestData.TEST_TEXT;
 import static org.mockito.Mockito.*;
@@ -42,7 +41,7 @@ public class NewsServiceImplTest {
     @Before
     public void init() {
         newsDTO = new NewsDTO(NEWS_ID_1, TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_STRING_DATE);
-        news = new News(TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_DATE_TIME);
+        news = new News(TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_DATE);
         news.setId(1L);
     }
 
@@ -50,23 +49,79 @@ public class NewsServiceImplTest {
     public void testSaveOrUpdateNews_WhenEverythingIsOk() throws BusinessException {
         when(newsDAO.saveOrUpdateNews(news)).thenReturn(news);
         NewsDTO resultNewsDTO = newsService.saveOrUpdateNews(newsDTO);
-        Assert.assertEquals(resultNewsDTO, newsDTO);
+        Assert.assertTrue(
+                (resultNewsDTO.getId() == newsDTO.getId())
+                && (resultNewsDTO.getTitle().equals(newsDTO.getTitle()))
+                && (resultNewsDTO.getBrief().equals(newsDTO.getBrief()))
+                && (resultNewsDTO.getContent().equals(newsDTO.getContent()))
+                && (resultNewsDTO.getNewsDate().equals(newsDTO.getNewsDate()))
+        );
     }
 
     @Test
-    public void testSaveOrUpdateNews_WhenThrowsBusinessException() throws BusinessException {
+    public void testSaveOrUpdateNews_WhenThrowsBusinessExceptionDateNotValid() throws BusinessException {
         exceptionRule.expect(BusinessException.class);
-        exceptionRule.expectMessage("Not valid format of date.");
-        newsDTO.setNewsDate("wrong date format");
+        exceptionRule.expectMessage("Not valid format of date");
+        newsDTO.setNewsDate("wrong date");
+        newsService.saveOrUpdateNews(newsDTO);
+    }
+
+    @Test
+    public void testSaveOrUpdateNews_WhenThrowsBusinessExceptionInvalidTitleLength() throws BusinessException {
+        exceptionRule.expect(BusinessException.class);
+        exceptionRule.expectMessage("Invalid title length");
+        StringBuilder stringLengthMoreThan100 = new StringBuilder();
+        for (int counter = 0; counter < 11; counter++) {
+            stringLengthMoreThan100.append("0123456789");
+        }
+        newsDTO.setTitle(stringLengthMoreThan100.toString());
+        newsService.saveOrUpdateNews(newsDTO);
+    }
+
+    @Test
+    public void testSaveOrUpdateNews_WhenThrowsBusinessExceptionInvalidBriefLength() throws BusinessException {
+        exceptionRule.expect(BusinessException.class);
+        exceptionRule.expectMessage("Invalid brief length");
+        StringBuilder stringLengthMoreThan500 = new StringBuilder();
+        for (int counter = 0; counter < 51; counter++) {
+            stringLengthMoreThan500.append("0123456789");
+        }
+        newsDTO.setBrief(stringLengthMoreThan500.toString());
+        newsService.saveOrUpdateNews(newsDTO);
+    }
+
+    // TODO why NPE????????????????????????????????????????????????????????????????????????????????????
+//    @Test
+//    public void testSaveOrUpdateNews_WhenThrowsBusinessExceptionInvalidContentLength() throws BusinessException {
+//        exceptionRule.expect(BusinessException.class);
+//        exceptionRule.expectMessage("Invalid content length");
+//        StringBuilder stringLengthMoreThan2000 = new StringBuilder();
+//        for (int counter = 0; counter < 201; counter++) {
+//            stringLengthMoreThan2000.append("0123456789");
+//        }
+//        newsDTO.setContent(stringLengthMoreThan2000.toString());
+//        newsService.saveOrUpdateNews(newsDTO);
+//    }
+
+    @Test
+    public void testSaveOrUpdateNews_WhenThrowsBusinessExceptionInvalidDateLength() throws BusinessException {
+        exceptionRule.expect(BusinessException.class);
+        exceptionRule.expectMessage("Invalid date length");
+        StringBuilder stringLengthMoreThan10 = new StringBuilder();
+        stringLengthMoreThan10.append("01234567890");
+        newsDTO.setNewsDate(stringLengthMoreThan10.toString());
         newsService.saveOrUpdateNews(newsDTO);
     }
 
     @Test
     public void testGetNewsById_WhenEverythingIsOk() {
-        long testId = 1L;
-        when(newsDAO.getNewsById(testId)).thenReturn(news);
-        NewsDTO resultNewsDTOFromService = newsService.getNewsById(testId);
-        Assert.assertEquals(testId, resultNewsDTOFromService.getId());
+        when(newsDAO.getNewsById(news.getId())).thenReturn(news);
+        NewsDTO resultNewsDTOFromService = newsService.getNewsById(news.getId());
+        Assert.assertEquals(news.getId(), resultNewsDTOFromService.getId());
+        Assert.assertEquals(news.getTitle(), resultNewsDTOFromService.getTitle());
+        Assert.assertEquals(news.getBrief(), resultNewsDTOFromService.getBrief());
+        Assert.assertEquals(news.getContent(), resultNewsDTOFromService.getContent());
+        Assert.assertEquals(news.getNewsDate().toString(), resultNewsDTOFromService.getNewsDate());
     }
 
     @Test
@@ -79,11 +134,17 @@ public class NewsServiceImplTest {
 
     @Test
     public void testGetAllNews_WhenEverythingIsOk() {
-        List<News> testNewsList = Collections.emptyList();
-        List<NewsDTO> expectedNewsDTOList = Collections.emptyList();
+        List<News> testNewsList = new ArrayList<>();
+        testNewsList.add(news);
+        List<NewsDTO> expectedNewsDTOList =  new ArrayList<>();
+        expectedNewsDTOList.add(newsDTO);
         when(newsDAO.getAllNews()).thenReturn(testNewsList);
         List<NewsDTO> resultList = newsService.getAllNews();
-        Assert.assertEquals(expectedNewsDTOList, resultList);
+        Assert.assertEquals(expectedNewsDTOList.get(0).getId(), resultList.get(0).getId());
+        Assert.assertEquals(expectedNewsDTOList.get(0).getTitle(), resultList.get(0).getTitle());
+        Assert.assertEquals(expectedNewsDTOList.get(0).getBrief(), resultList.get(0).getBrief());
+        Assert.assertEquals(expectedNewsDTOList.get(0).getContent(), resultList.get(0).getContent());
+        Assert.assertEquals(expectedNewsDTOList.get(0).getNewsDate(), resultList.get(0).getNewsDate());
     }
 
     @Test
@@ -91,6 +152,7 @@ public class NewsServiceImplTest {
         long testId = 1L;
         doNothing().when(newsDAO).deleteNews(testId);
         newsService.deleteNews(testId);
+        // TODO should I check deleting when getNewsById(testId) ???
     }
 
     @Test
@@ -107,6 +169,9 @@ public class NewsServiceImplTest {
         List<Long> testLongList = new ArrayList<>();
         testLongList.add(testId);
         doNothing().when(newsDAO).deleteNews(testId);
+        // TODO why test passed
+//          doNothing().when(newsDAO).deleteNews(3L);
+        //  3L instead of testId with 1L ???
         newsService.deleteNews(testLongList);
     }
 
