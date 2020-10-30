@@ -83,7 +83,6 @@ public class NewsServiceImpl implements NewsService {
         news.setTitle(newsDTO.getTitle());
         news.setBrief(newsDTO.getBrief());
         news.setContent(newsDTO.getContent());
-        System.out.println(newsDTO.getNewsDate());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate;
         try {
