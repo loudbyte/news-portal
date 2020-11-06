@@ -9,6 +9,7 @@ import ViewNews from "./components/view-news.component";
 import NewsList from "./components/news-list.component";
 import Login from "./components/login.component";
 import Welcome from "./components/welcome.component";
+import NewsDataService from "./services/news.service";
 
 
 
@@ -32,6 +33,14 @@ class App extends Component {
               </Link>
             </li>
           </div>
+          <div className="navbar-nav mr">
+          <li className="nav-item">
+              <Link onClick={NewsDataService.logout} className="nav-link">
+                Logout
+              </Link>
+            </li>
+          </div>
+
         </nav>
 
         <div className="container mt-3">

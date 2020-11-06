@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import NewsDataService from "../services/news.service";
 
 export default class Welcome extends Component {
 
@@ -7,7 +6,7 @@ export default class Welcome extends Component {
     return (
       <div>
         <h1>Welcome to news portal</h1>
-        <a href="login" type="button" className="btn btn-info">Login</a>
+        <a href="/login" type="button" className="btn btn-info">Login</a>
       </div>
     );
   }

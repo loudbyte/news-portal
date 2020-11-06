@@ -9,7 +9,7 @@ public class NewsDTOTextLengthValidator {
 
     private static final int TITLE_LENGTH = 100;
     private static final int BRIEF_LENGTH = 500;
-    private static final int CONTENT_LENGTH = 2048;
+    private static final int CONTENT_LENGTH = 2000;
     private static final int DATE_LENGTH = 10;
 
     public static boolean isTitleLengthValid(NewsDTO newsDTO) throws BusinessException {

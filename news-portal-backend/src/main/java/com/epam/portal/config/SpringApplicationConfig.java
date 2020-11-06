@@ -1,5 +1,7 @@
 package com.epam.portal.config;
 
+import com.epam.portal.entity.News;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,6 +26,15 @@ import javax.sql.DataSource;
 @EnableAspectJAutoProxy
 public class SpringApplicationConfig extends WebSecurityConfigurerAdapter {
 
+    @Bean
+    public SessionFactory sessionFactory() {
+        final SessionFactory sessionFactory = new org.hibernate.cfg.Configuration()
+                .configure("hibernate.cfg.xml")
+                .addAnnotatedClass(News.class)
+                .buildSessionFactory();
+        return sessionFactory;
+    }
+
     @Autowired
     private Environment environment;
 
@@ -46,7 +57,7 @@ public class SpringApplicationConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+        // TODO do not use roles
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/news")
                 .hasRole("EMPLOYEE")
@@ -56,9 +67,9 @@ public class SpringApplicationConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyRole("MANAGER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/news/**")
                 .hasAnyRole("MANAGER", "ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/news")
-                .hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/news/**")
+                .hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/news")
                 .hasRole("ADMIN")
                 .and()
                 .httpBasic()

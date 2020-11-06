@@ -15,6 +15,9 @@ import java.util.List;
 public class TextForbiddenWordValidator {
 
     public static boolean isNotContainsForbiddenWords(String inputText) throws BusinessException {
+        if (inputText == null) {
+            throw new BusinessException("Empty field");
+        }
         String[] inputTextAsWordArray = inputText.split(" ");
         List<String> items = getWords();
         for (int counterOfForbiddenWords = 0; counterOfForbiddenWords < items.size(); counterOfForbiddenWords++) {

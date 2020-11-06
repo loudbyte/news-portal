@@ -16,7 +16,8 @@ export default class ViewNews extends Component {
         title: "",
         brief: "",
         content: "",
-        newsDate: ""
+        newsDate: "",
+        language: ""
       },
       message: ""
     };
@@ -38,7 +39,6 @@ export default class ViewNews extends Component {
         console.log(e);
       });
   }
-
 
   getNews(id) {
     NewsDataService.get(id)
@@ -113,6 +113,9 @@ export default class ViewNews extends Component {
                       </Col>
                       <Col xs={4}>
                         {this.getParsedDate(currentNews.newsDate)}
+                      </Col>
+                      <Col xs={4}>
+                        Language: {currentNews.language}
                       </Col>
                     </Row>
                   </Card.Header>    

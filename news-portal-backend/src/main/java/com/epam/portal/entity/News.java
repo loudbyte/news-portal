@@ -23,16 +23,20 @@ public class News {
 
     private String content;
 
+    @Column(name = "LANG")
+    private String language;
+
     @Column(name = "NEWS_DATE")
     private LocalDate newsDate;
 
     public News() {
     }
 
-    public News(String title, String brief, String content, LocalDate newsDate) {
+    public News(String title, String brief, String content, String language, LocalDate newsDate) {
         this.title = title;
         this.brief = brief;
         this.content = content;
+        this.language = language;
         this.newsDate = newsDate;
     }
 
@@ -68,23 +72,20 @@ public class News {
         this.content = content;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     public LocalDate getNewsDate() {
         return newsDate;
     }
 
     public void setNewsDate(LocalDate newsDate) {
         this.newsDate = newsDate;
-    }
-
-    @Override
-    public String toString() {
-        return "News{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", brief='" + brief + '\'' +
-                ", content='" + content + '\'' +
-                ", newsDate='" + newsDate + '\'' +
-                '}';
     }
 
     @Override
@@ -96,11 +97,24 @@ public class News {
                 Objects.equals(title, news.title) &&
                 Objects.equals(brief, news.brief) &&
                 Objects.equals(content, news.content) &&
+                Objects.equals(language, news.language) &&
                 Objects.equals(newsDate, news.newsDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, brief, content, newsDate);
+        return Objects.hash(id, title, brief, content, language, newsDate);
+    }
+
+    @Override
+    public String toString() {
+        return "News{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", brief='" + brief + '\'' +
+                ", content='" + content + '\'' +
+                ", language='" + language + '\'' +
+                ", newsDate=" + newsDate +
+                '}';
     }
 }

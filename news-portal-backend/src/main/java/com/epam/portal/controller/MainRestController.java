@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
@@ -44,6 +46,9 @@ public class MainRestController {
         this.newsService = newsService;
     }
 
+
+    // TODO добавить опциональный параметр для get - lang, если не задан, то выдаем все новости.
+    // Если задан - выдаем новости по конкретному языкук
     @GetMapping("/news")
     public ResponseEntity<List<NewsDTO>> getAllNews() {
 
@@ -82,12 +87,23 @@ public class MainRestController {
         return ResponseEntity.ok("News with id " + id + " deleted.");
     }
 
-    @DeleteMapping(path = "/news", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> deleteNews(@RequestBody List<String> body) {
+    @PutMapping(path = "/news", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> deleteNewsList(@RequestBody List<String> body) throws BusinessException {
 
-        // TODO catch exception if try to delete non existing entity
+        List<Long> idList = new ArrayList<>();
+        for (String stringId : body ) {
+            try {
+                idList.add(Long.valueOf(stringId));
+            } catch (NumberFormatException exception) {
+                throw new BusinessException("Id is not valid");
+            }
+        }
 
-//        newsService.deleteNews(body);
-        return ResponseEntity.ok("News with ids " + body.toString() + " deleted.");
+        try {
+            newsService.deleteNews(idList);
+        } catch (PersistenceException exception) {
+            throw new BusinessException("News with that id not found");
+        }
+        return ResponseEntity.ok("News with ids " + idList.toString() + " deleted.");
     }
 }

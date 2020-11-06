@@ -7,6 +7,7 @@ export default class EditNews extends Component {
     this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeBrief = this.onChangeBrief.bind(this);
     this.onChangeContent = this.onChangeContent.bind(this);
+    this.onChangeLanguage = this.onChangeLanguage.bind(this);
     this.onChangeDate = this.onChangeDate.bind(this);
     this.getNews = this.getNews.bind(this);
     this.updateNews = this.updateNews.bind(this);
@@ -18,6 +19,7 @@ export default class EditNews extends Component {
         title: "",
         brief: "",
         content: "",
+        language: "",
         newsDate: ""
       },
       message: ""
@@ -67,6 +69,17 @@ export default class EditNews extends Component {
       currentNews: {
         ...prevState.currentNews,
         content: content
+      }
+    }));
+  }
+
+  onChangeLanguage(e) {
+    const language = e.target.value;
+    
+    this.setState(prevState => ({
+      currentNews: {
+        ...prevState.currentNews,
+        language: language
       }
     }));
   }
@@ -150,6 +163,7 @@ export default class EditNews extends Component {
                   onChange={this.onChangeBrief}
                 />
               </div>
+
               <div className="form-group">
                 <label htmlFor="content">Content</label>
                 <textarea rows="6"
@@ -160,10 +174,22 @@ export default class EditNews extends Component {
                   onChange={this.onChangeContent}
                 />
               </div>
+
+              <div className="form-group">
+                <label htmlFor="language">Language</label>
+                <textarea rows="1"
+                  type="text"
+                  className="form-control"
+                  id="language"
+                  value={currentNews.language}
+                  onChange={this.onChangeLanguage}
+                />
+              </div>
+
               <div className="form-group">
                 <label htmlFor="newsDate">Date</label>
                 <input
-                type="datetime-local"
+                type="text"
                   className="form-control"
                   id="newsDate"
                   value={currentNews.newsDate}

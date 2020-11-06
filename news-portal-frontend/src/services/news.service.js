@@ -1,41 +1,72 @@
 import http from "../http-common";
 
+var token = Buffer.from(`${sessionStorage.getItem('login')}:${sessionStorage.getItem('password')}`, 'utf8').toString('base64')
+
 class NewsDataService {
   getAll() {
-    return http.get("/news");
+    return http.get("/news", {
+      headers: {
+        'Authorization': `Basic ${token}`  
+      }
+    });
   }
 
   get(id) {
-    return http.get(`/news/${id}`);
+    return http.get(`/news/${id}`, {
+      headers: {
+        'Authorization': `Basic ${token}`  
+      }
+    });
   }
 
   create(data) {
-    return http.post("/news", data);
+    return http.post("/news", data, {
+      headers: {
+        'Authorization': `Basic ${token}`  
+      }
+    });
   }
 
   update(id, data) {
-    return http.post(`/news`, data);
+    return http.post(`/news`, data, {
+      headers: {
+        'Authorization': `Basic ${token}`  
+      }
+    });
   }
 
   delete(id) {
-    return http.delete(`/news/${id}`);
+    return http.delete(`/news/${id}`, {
+      headers: {
+        'Authorization': `Basic ${token}`  
+      }
+    });
   }
 
-  deleteList(data) {
-    return http.delete(`/news`, ["1", "2", "3"]);
+  deleteList(data) { 
+    return http.put(`/news`, data, {
+      headers: {
+        'Authorization': `Basic ${token}`  
+      }
+    });
   }
 
-  login(data) {
-    return http.get(`/login`, data);
+  login() {
+    token = Buffer.from(`${sessionStorage.getItem('login')}:${sessionStorage.getItem('password')}`, 'utf8').toString('base64');
+
+    return http.get(`/news`,  {
+      headers: {
+        'Authorization': `Basic ${token}`  
+      }
+    })
   }
 
-  // deleteAll() {
-  //   return http.delete(`/news`);
-  // }
+  logout() {
+    sessionStorage.clear();
+    window.location.reload();
+    window.location.assign("/")
 
-  // findByTitle(title) {
-  //   return http.get(`/news?title=${title}`);
-  // }
+  }
 }
 
 export default new NewsDataService();

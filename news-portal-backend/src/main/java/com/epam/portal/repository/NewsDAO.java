@@ -12,5 +12,7 @@ public interface NewsDAO {
 
     List<News> getAllNews();
 
+    List<News> getAllNewsByLanguage(String language);
+
     void deleteNews(long id);
 }

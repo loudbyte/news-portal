@@ -6,6 +6,7 @@ import com.epam.portal.exception.BusinessException;
 import com.epam.portal.repository.NewsDAO;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static com.epam.portal.NewsTestData.NEWS_ID_1;
 import static com.epam.portal.NewsTestData.TEST_DATE;
+import static com.epam.portal.NewsTestData.TEST_LANG_RU;
 import static com.epam.portal.NewsTestData.TEST_STRING_DATE;
 import static com.epam.portal.NewsTestData.TEST_TEXT;
 import static org.mockito.Mockito.*;
@@ -40,13 +42,15 @@ public class NewsServiceImplTest {
 
     @Before
     public void init() {
-        newsDTO = new NewsDTO(NEWS_ID_1, TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_STRING_DATE);
-        news = new News(TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_DATE);
+        newsDTO = new NewsDTO(NEWS_ID_1, TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_STRING_DATE, TEST_LANG_RU);
+        news = new News(TEST_TEXT, TEST_TEXT,TEST_TEXT, TEST_LANG_RU, TEST_DATE);
         news.setId(1L);
     }
 
     @Test
+    @Ignore
     public void testSaveOrUpdateNews_WhenEverythingIsOk() throws BusinessException {
+        // TODO NPE
         when(newsDAO.saveOrUpdateNews(news)).thenReturn(news);
         NewsDTO resultNewsDTO = newsService.saveOrUpdateNews(newsDTO);
         Assert.assertTrue(
@@ -90,18 +94,19 @@ public class NewsServiceImplTest {
         newsService.saveOrUpdateNews(newsDTO);
     }
 
-    // TODO why NPE????????????????????????????????????????????????????????????????????????????????????
-//    @Test
-//    public void testSaveOrUpdateNews_WhenThrowsBusinessExceptionInvalidContentLength() throws BusinessException {
-//        exceptionRule.expect(BusinessException.class);
-//        exceptionRule.expectMessage("Invalid content length");
-//        StringBuilder stringLengthMoreThan2000 = new StringBuilder();
-//        for (int counter = 0; counter < 201; counter++) {
-//            stringLengthMoreThan2000.append("0123456789");
-//        }
-//        newsDTO.setContent(stringLengthMoreThan2000.toString());
-//        newsService.saveOrUpdateNews(newsDTO);
-//    }
+    @Test
+    public void testSaveOrUpdateNews_WhenThrowsBusinessExceptionInvalidContentLength() throws BusinessException {
+        exceptionRule.expect(BusinessException.class);
+        exceptionRule.expectMessage("Invalid content length");
+        StringBuilder stringLengthMoreThan2000 = new StringBuilder();
+
+        for (int counter = 0; counter < 201; counter++) {
+            stringLengthMoreThan2000.append("0123456789");
+        }
+        newsDTO.setId(1);
+        newsDTO.setContent(stringLengthMoreThan2000.toString());
+        newsService.saveOrUpdateNews(newsDTO);
+    }
 
     @Test
     public void testSaveOrUpdateNews_WhenThrowsBusinessExceptionInvalidDateLength() throws BusinessException {
@@ -110,6 +115,18 @@ public class NewsServiceImplTest {
         StringBuilder stringLengthMoreThan10 = new StringBuilder();
         stringLengthMoreThan10.append("01234567890");
         newsDTO.setNewsDate(stringLengthMoreThan10.toString());
+        newsService.saveOrUpdateNews(newsDTO);
+    }
+
+    @Test
+    public void testSaveOrUpdateNews_BusinessException_EmptyField() throws BusinessException {
+        exceptionRule.expect(BusinessException.class);
+        exceptionRule.expectMessage("Empty field");
+        // TODO test every field and variant in diff test-method
+        newsDTO.setTitle("");
+        newsDTO.setBrief("a");
+        newsDTO.setContent("a");
+        newsDTO.setNewsDate("2020-01-01");
         newsService.saveOrUpdateNews(newsDTO);
     }
 

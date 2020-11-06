@@ -13,6 +13,8 @@ public interface NewsService {
 
     List<NewsDTO> getAllNews();
 
+    List<NewsDTO> getAllNewsByLanguage(String language);
+
     void deleteNews(long id);
 
     void deleteNews(List<Long> id);

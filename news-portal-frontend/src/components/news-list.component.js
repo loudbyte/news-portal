@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Form, Card, Col, Row, ListGroup, Button, ButtonGroup} from 'react-bootstrap';
+import {Form, Card, Col, Row, ListGroup, ButtonGroup} from 'react-bootstrap';
 import NewsDataService from "../services/news.service";
 import { Link } from "react-router-dom";
 
@@ -16,7 +16,7 @@ export default class NewsList extends Component {
       newsList: [],
       currentNews: null,
       currentIndex: -1,
-      hobbies:[]
+      newsIds:[]
     };
   }
 
@@ -25,39 +25,28 @@ export default class NewsList extends Component {
     var value = target.value;
     
     if(target.checked){
-        this.state.hobbies[value] = value;   
+        this.state.newsIds[value] = value;   
     }
     else{
-        this.state.hobbies.splice(value, 1);
+        this.state.newsIds.splice(value, 1);
     }
     
 }
 
-
-
 submit(){
-    alert(this.state.hobbies)
+    alert(this.state.newsIds.filter(Number))
 }
 
-
 deleteNewsList() {
-
-  var data = {
-    newsIdList: this.state.hobbies.filter(Number)
-  };
-  
-  NewsDataService.deleteList(data)
+  NewsDataService.deleteList(this.state.newsIds.filter(Number))
   .then(response => {
-    this.setState({
-      newsIdList: response.data.hobbies.filter(Number),
-      submitted: true
-    });
-      console.log(response.data);
-      this.props.history.push('/news')
-    })
-    .catch(e => {
-      console.log(e);
-    });
+    console.log(response.data);
+    this.props.history.push('/')
+    this.props.history.push('/news')
+  })
+  .catch(e => {
+    console.log(e);
+  });
 }
 
   componentDidMount() {
@@ -157,7 +146,7 @@ deleteNewsList() {
           </ListGroup>
           <div class="form-row">
             <div class="col-md-12 text-center">
-              <button type="submit" class="btn btn-primary" onClick={()=>this.submit()}>Submit</button>
+              <button type="button" class="btn btn-primary" onClick={()=>this.submit()}>Show selected</button>
               <button
               className="btn my-button btn-danger"
               onClick={this.deleteNewsList}

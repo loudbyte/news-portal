@@ -7,6 +7,7 @@ export default class AddNews extends Component {
     this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeBrief = this.onChangeBrief.bind(this);
     this.onChangeContent = this.onChangeContent.bind(this);
+    this.onChangeLanguage = this.onChangeLanguage.bind(this);
     this.onChangeDate = this.onChangeDate.bind(this);
     this.saveNews = this.saveNews.bind(this);
 
@@ -15,6 +16,7 @@ export default class AddNews extends Component {
       title: "",
       brief: "", 
       content: "",
+      language: "",
       newsDate: "",
 
       submitted: false
@@ -36,6 +38,12 @@ export default class AddNews extends Component {
   onChangeContent(e) {
     this.setState({
       content: e.target.value
+    });
+  }
+  
+  onChangeLanguage(e) {
+    this.setState({
+      language: e.target.value
     });
   }
 
@@ -116,6 +124,19 @@ export default class AddNews extends Component {
                 value={this.state.content}
                 onChange={this.onChangeContent}
                 name="content"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="language">Language</label>
+              <textarea rows="1"
+                type="text"
+                className="form-control"
+                id="language"
+                required
+                value={this.state.language}
+                onChange={this.onChangeLanguage}
+                name="language"
               />
             </div>
 

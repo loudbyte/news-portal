@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.junit.rules.ExpectedException;
 
-
 import javax.persistence.PersistenceException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,9 +18,12 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.epam.portal.NewsTestData.FORMATTER;
+import static com.epam.portal.NewsTestData.TEST_LANG_RU;
 import static com.epam.portal.NewsTestData.TEST_STRING_DATE;
 import static com.epam.portal.NewsTestData.TEST_TEXT;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NewsDAOImplTest extends TestCase {
@@ -37,10 +39,9 @@ public class NewsDAOImplTest extends TestCase {
 
     @Before
     public void setUp() {
-        news = new News(TEST_TEXT, TEST_TEXT, TEST_TEXT, testDate);
-        news.setId(1L);
         testDate = LocalDate.parse(TEST_STRING_DATE, FORMATTER);
-
+        news = new News(TEST_TEXT, TEST_TEXT, TEST_TEXT, TEST_LANG_RU, testDate);
+        news.setId(1L);
     }
 
     @Test

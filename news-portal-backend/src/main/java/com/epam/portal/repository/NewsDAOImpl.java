@@ -4,8 +4,8 @@ import com.epam.portal.entity.News;
 import com.sun.istack.internal.NotNull;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,10 +13,12 @@ import java.util.List;
 @Repository
 public class NewsDAOImpl implements NewsDAO {
 
-    SessionFactory sessionFactory = new Configuration()
-            .configure("hibernate.cfg.xml")
-            .addAnnotatedClass(News.class)
-            .buildSessionFactory();
+    private SessionFactory sessionFactory;
+
+    @Autowired
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public News getNewsById(@NotNull final long id) {
@@ -25,7 +27,6 @@ public class NewsDAOImpl implements NewsDAO {
             currentSession.beginTransaction();
             News news = currentSession.get(News.class, id);
             currentSession.getTransaction().commit();
-            currentSession.close();
 
             return news;
         }
@@ -38,7 +39,6 @@ public class NewsDAOImpl implements NewsDAO {
             currentSession.beginTransaction();
             currentSession.saveOrUpdate(news);
             currentSession.getTransaction().commit();
-            currentSession.close();
 
             return news;
         }
@@ -54,7 +54,22 @@ public class NewsDAOImpl implements NewsDAO {
             List<News> newsList = query.getResultList();
 
             currentSession.getTransaction().commit();
-            currentSession.close();
+
+            return newsList;
+        }
+    }
+
+    @Override
+    public List<News> getAllNewsByLanguage(String language) {
+        try (final Session currentSession = sessionFactory.getCurrentSession()) {
+
+            currentSession.beginTransaction();
+
+            Query<News> query = currentSession.createQuery("FROM News WHERE language=:LANG", News.class);
+            query.setParameter("LANG", language);
+            List<News> newsList = query.getResultList();
+
+            currentSession.getTransaction().commit();
 
             return newsList;
         }
@@ -71,7 +86,6 @@ public class NewsDAOImpl implements NewsDAO {
 
             currentSession.delete(news);
             currentSession.getTransaction().commit();
-            currentSession.close();
         }
     }
 }
