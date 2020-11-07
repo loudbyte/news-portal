@@ -23,6 +23,7 @@ import static com.epam.portal.NewsTestData.TEST_DATE;
 import static com.epam.portal.NewsTestData.TEST_LANG_RU;
 import static com.epam.portal.NewsTestData.TEST_STRING_DATE;
 import static com.epam.portal.NewsTestData.TEST_TEXT;
+//TODO just fix it =)
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
