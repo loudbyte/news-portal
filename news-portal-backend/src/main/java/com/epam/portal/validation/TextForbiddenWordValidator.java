@@ -14,12 +14,16 @@ import java.util.List;
 @Component
 public class TextForbiddenWordValidator {
 
+    //you are able to change return 'boolean' to void and return nothing
+    
     public static boolean isNotContainsForbiddenWords(String inputText) throws BusinessException {
+        //null == inputText
         if (inputText == null) {
             throw new BusinessException("Empty field");
         }
         String[] inputTextAsWordArray = inputText.split(" ");
         List<String> items = getWords();
+        //try to use foreach construction
         for (int counterOfForbiddenWords = 0; counterOfForbiddenWords < items.size(); counterOfForbiddenWords++) {
             for (int counterOfInputWords = 0; counterOfInputWords < inputTextAsWordArray.length; counterOfInputWords++) {
                 if (inputTextAsWordArray[counterOfInputWords].toLowerCase().equals(items.get(counterOfForbiddenWords))) {
@@ -30,6 +34,7 @@ public class TextForbiddenWordValidator {
         return true;
     }
 
+    //does this method is used anywhere else? if not, make them private
     public static List<String> getWords() {
         try {
             String line = "";
@@ -40,11 +45,12 @@ public class TextForbiddenWordValidator {
             while ((line = bufferedReader.readLine()) != null) {
                 wordsList.add(line.toLowerCase());
             }
+            //I think BufferedReader is autocloasble, that's why you don't need close it explicitly
             bufferedReader.close();
             return wordsList;
         } catch (IOException ex) {
-            System.out.println("error getWords() : " + ex.getMessage());
+            System.out.println("error getWords() : " + ex.getMessage()); //Output to console? let's log it with log.error
         }
-        return null;
+        return null;//or you are able return emptyList
     }
 }
