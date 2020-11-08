@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,13 +47,18 @@ public class MainRestController {
         this.newsService = newsService;
     }
 
-
-    // TODO добавить опциональный параметр для get - lang, если не задан, то выдаем все новости.
-    // Если задан - выдаем новости по конкретному языкук
     @GetMapping("/news")
-    public ResponseEntity<List<NewsDTO>> getAllNews() {
+    public ResponseEntity<List<NewsDTO>> getAllNews(@RequestParam(required = false) String lang) {
 
-        return ResponseEntity.ok(newsService.getAllNews());
+        ResponseEntity<List<NewsDTO>> response;
+
+        if (lang != null) {
+            response = ResponseEntity.ok(newsService.getAllNewsByLanguage(lang));
+        } else {
+            response = ResponseEntity.ok(newsService.getAllNews());
+        }
+
+        return response;
     }
 
     @GetMapping("/news/{id}")
