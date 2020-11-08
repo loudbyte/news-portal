@@ -23,7 +23,9 @@ import static com.epam.portal.NewsTestData.TEST_DATE;
 import static com.epam.portal.NewsTestData.TEST_LANG_RU;
 import static com.epam.portal.NewsTestData.TEST_STRING_DATE;
 import static com.epam.portal.NewsTestData.TEST_TEXT;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NewsServiceImplTest {
