@@ -14,23 +14,22 @@ import java.util.List;
 @Component
 public class TextForbiddenWordValidator {
 
-    public static boolean isNotContainsForbiddenWords(String inputText) throws BusinessException {
-        if (inputText == null) {
+    public static void isNotContainsForbiddenWords(String inputText) throws BusinessException {
+        if (null == inputText) {
             throw new BusinessException("Empty field");
         }
         String[] inputTextAsWordArray = inputText.split(" ");
         List<String> items = getWords();
-        for (int counterOfForbiddenWords = 0; counterOfForbiddenWords < items.size(); counterOfForbiddenWords++) {
-            for (int counterOfInputWords = 0; counterOfInputWords < inputTextAsWordArray.length; counterOfInputWords++) {
-                if (inputTextAsWordArray[counterOfInputWords].toLowerCase().equals(items.get(counterOfForbiddenWords))) {
+        for (String item : items) {
+            for (String s : inputTextAsWordArray) {
+                if (s.toLowerCase().equals(item)) {
                     throw new BusinessException("Text contains forbidden words");
                 }
             }
         }
-        return true;
     }
 
-    public static List<String> getWords() {
+    private static List<String> getWords() throws BusinessException {
         try {
             String line = "";
             File file = new ClassPathResource("/forbiddenWords.txt").getFile();
@@ -43,8 +42,7 @@ public class TextForbiddenWordValidator {
             bufferedReader.close();
             return wordsList;
         } catch (IOException ex) {
-            System.out.println("error getWords() : " + ex.getMessage());
+            throw new BusinessException("Cannot reach forbidden words");
         }
-        return null;
     }
 }
