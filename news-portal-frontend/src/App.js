@@ -23,14 +23,24 @@ class App extends Component {
           </a>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
-              <Link to={"/news"} className="nav-link">
-                All News
-              </Link>
+              <a href="/news" className="nav-link">
+              All News
+              </a>
             </li>
             <li className="nav-item">
-              <Link to={"/add"} className="nav-link">
-                Add
-              </Link>
+              <a href="/newsen" className="nav-link">
+              EN News
+              </a>
+            </li>
+            <li className="nav-item">
+              <a href="/newsru" className="nav-link">
+              RU News
+              </a>
+            </li>
+            <li className="nav-item">
+              <a href="/add" className="nav-link">
+               Add
+              </a>
             </li>
           </div>
           <div className="navbar-nav mr">
@@ -51,6 +61,7 @@ class App extends Component {
             <Route exact path="/add" component={AddNews} />
             <Route path="/edit/:id" component={EditNews} />
             <Route path="/view/:id" component={ViewNews} />
+            <Route path="/news:lang" render={(props) => <NewsList {...props} />}/> 
           </Switch>
         </div>
       </div>

@@ -11,6 +11,14 @@ class NewsDataService {
     });
   }
 
+  getByLang(lang) {
+    return http.get(`/news?lang=${lang}`, {
+      headers: {
+        'Authorization': `Basic ${token}`  
+      }
+    });
+  }
+
   get(id) {
     return http.get(`/news/${id}`, {
       headers: {

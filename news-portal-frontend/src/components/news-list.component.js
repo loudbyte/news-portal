@@ -16,7 +16,8 @@ export default class NewsList extends Component {
       newsList: [],
       currentNews: null,
       currentIndex: -1,
-      newsIds:[]
+      newsIds:[],
+      language: this.props.match.params.lang
     };
   }
 
@@ -54,7 +55,8 @@ deleteNewsList() {
   }
 
   retrieveNewsList() {
-    NewsDataService.getAll()
+    if (this.state.language != null) {
+      NewsDataService.getByLang(this.state.language)
       .then(response => {
         this.setState({
           newsList: response.data
@@ -64,6 +66,18 @@ deleteNewsList() {
       .catch(e => {
         console.log(e);
       });
+    } else {
+      NewsDataService.getAll()
+      .then(response => {
+        this.setState({
+          newsList: response.data
+        });
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    }
   }
 
   refreshList() {
@@ -112,8 +126,7 @@ deleteNewsList() {
                     <Row>
                       <Col>
                         {currentNews.title}
-                      </Col>
-                      <Col xs={4}>
+                      <Col xs={4}></Col>
                         {this.getParsedDate(currentNews.newsDate)}
                       </Col>
                     </Row>
