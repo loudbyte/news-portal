@@ -18,6 +18,7 @@ export default class AddNews extends Component {
       content: "",
       language: "",
       newsDate: "",
+      language: "",
 
       submitted: false
     };
@@ -58,7 +59,8 @@ export default class AddNews extends Component {
       title: this.state.title,
       brief: this.state.brief,
       content: this.state.content,
-      newsDate: this.state.newsDate
+      newsDate: this.state.newsDate,
+      language: this.state.language
     };
 
     NewsDataService.create(data)
@@ -69,6 +71,7 @@ export default class AddNews extends Component {
           brief: response.data.brief,
           content: response.data.content,
           newsDate: response.data.newsDate,
+          language: response.data.language,
 
           submitted: true
         });
